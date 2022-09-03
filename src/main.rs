@@ -21,7 +21,7 @@ fn fizzbuzz_selector(args: Vec<String>) {
     match args[1].as_str() {
         "1" => fizzbuzz(),
         "2" => fizzbuzz_match(),
-        "3" => println!("TBA"),
+        "3" => fizzbuzz_idiomatic(),
         _ => println!("Err: Invalid arg"),
     }
 }
@@ -48,6 +48,60 @@ fn fizzbuzz_match() {
             (0, _) => println!("Fizz"),
             (_, 0) => println!("Buzz"),
             (_, _) => println!("{}", i),
+        }
+    }
+}
+
+// Control func for callin fizzy()
+fn fizzbuzz_idiomatic() {
+    for i in 1..101 {
+        println!("{}", i.fizzy());
+    }
+}
+
+// Trait for fizzy()
+pub trait Fizzy {
+    fn fizzy(&self) -> String;
+}
+
+// Implement fizzy()
+impl Fizzy for i32 {
+    fn fizzy(&self) -> String {
+        match(self % 3, self % 5) {
+            (0, 0) => "FizzBuzz".to_string(),
+            (0, _) => "Fizz".to_string(),
+            (_, 0) => "Buzz".to_string(),
+            (_, _) => self.to_string(),
+        }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_fizz() {
+        for i in &[3, 6, 27] {
+            assert_eq!(i.fizzy(), "Fizz");
+        }
+    }
+    #[test]
+    fn test_buzz() {
+        for i in &[5, 10, 25] {
+            assert_eq!(i.fizzy(), "Buzz");
+        }
+    }
+    #[test]
+    fn test_fizzbuzz() {
+        for i in &[15, 30, 45] {
+            assert_eq!(i.fizzy(), "FizzBuzz");
+        }
+    }
+    #[test]
+    fn test_numbers(){
+        for i in &[1, 2, 4, 13, 29, 98] {
+            assert_eq!(i.fizzy(), i.to_string());
         }
     }
 }
